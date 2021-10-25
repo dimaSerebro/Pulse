@@ -9,11 +9,12 @@ $(document).ready(function(){
             breakpoint: 992,
             settings: {
                dots: true,
-               arrows: false,
+               arrows: false
             }
          }
       ]
    });
+
    $('ul.catalog__tabs').on('click', 'li:not(.catalog__tab_active)', function() {
       $(this)
         .addClass('catalog__tab_active').siblings().removeClass('catalog__tab_active')
@@ -32,5 +33,53 @@ $(document).ready(function(){
 
     toggleSlide('.catalog-item__link');
     toggleSlide('.catalog-item__back');
+
+    // Modal
+
+   $('[data-modal=consultation]').on('click', function () {
+      $('.overlay, #consultation').fadeIn('slow');
+   });
+   $('.modal__close').on('click', function () {
+      $('.overlay, #consultation, #thanks, #order').fadeOut('slow');
+   });
+   $('.button_mini').each(function(i) {
+      $(this).on('click', function () {
+         $('#order .modal__descr').text($('.catalog-item__subtitle').eq(i).text());
+         $('.overlay, #order').fadeIn('slow');
+      });
+   });
+
+   function validateForms(form) {
+      $(form).validate({
+         rules: {
+            name: {
+               required: true,
+               minlength: 2
+            },
+            phone: "required",
+            email: {
+               required: true,
+               email: true
+            }
+         },
+         messages: {
+            name:{
+               required: "Пожайлуста введите свое имя",
+               minlength: jQuery.validator.format("Введите {0} символа!")
+             },
+            phone: "Пожайлуста введите свой номер телефона",
+            email: {
+              required: "Пожайлуста введите свою почту",
+              email: "Неверно указан почтовый адресс"
+            }
+          }
+      });
+   };
+
+   validateForms ('#consultation-form');
+   validateForms ('#consultation form');
+   validateForms ('#order form');
+
+   $('input[name=phone]').mask("+38 (999) 999-99-99");
 
  });
